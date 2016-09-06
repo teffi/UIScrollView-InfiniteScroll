@@ -8,7 +8,7 @@
 
 import UIKit
 
-private let useAutosizingCells = true
+private let useAutosizingCells = false
 
 class TableViewController: UITableViewController {
     
@@ -23,6 +23,10 @@ class TableViewController: UITableViewController {
     
     // MARK: - Lifecycle
     
+    deinit {
+        print("dealloc")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -30,6 +34,8 @@ class TableViewController: UITableViewController {
             tableView.estimatedRowHeight = 88
             tableView.rowHeight = UITableViewAutomaticDimension
         }
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "showPushed")
         
         // Set custom indicator
         tableView.infiniteScrollIndicatorView = CustomInfiniteIndicator(frame: CGRectMake(0, 0, 24, 24))
@@ -56,6 +62,30 @@ class TableViewController: UITableViewController {
          */
         
         fetchData(nil)
+    }
+    
+    func showPushed() {
+        let newController = self.storyboard?.instantiateViewControllerWithIdentifier("tableDemo")
+        
+        self.navigationController?.pushViewController(newController!, animated: true)
+    }
+    
+    func showModal() {
+        let newController = self.storyboard?.instantiateViewControllerWithIdentifier("tableDemo")
+        let navigationController = UINavigationController(rootViewController: newController!)
+        
+        let _ = newController?.view
+        newController?.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "closeModal")
+        
+        self.navigationController?.presentViewController(navigationController, animated: true, completion: {
+            
+        })
+    }
+    
+    func closeModal() {
+        self.dismissViewControllerAnimated(true) { 
+            
+        }
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -116,7 +146,7 @@ class TableViewController: UITableViewController {
         UIApplication.sharedApplication().startNetworkActivity()
         
         // I run task.resume() with delay because my network is too fast
-        let delay = (stories.count == 0 ? 0 : 5) * Double(NSEC_PER_SEC)
+        let delay = (stories.count == 0 ? 0 : 0) * Double(NSEC_PER_SEC)
         let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
         dispatch_after(time, dispatch_get_main_queue(), {
             task.resume()
