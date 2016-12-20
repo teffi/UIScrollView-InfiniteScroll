@@ -18,13 +18,18 @@ Just add the following line in your Podfile:
 pod 'UIScrollView-InfiniteScroll'
 ```
 
+### Documentation
+
+Documentation is available at:
+http://pronebird.github.io/UIScrollView-InfiniteScroll/
+
 ### Basic usage
 
 Objective-C:
 
 ```objc
 // Somewhere in your implementation file
-#import <UIScrollView+InfiniteScroll.h>
+#import <UIScrollView_InfiniteScroll/UIScrollView+InfiniteScroll.h>
 
 // ...
 
@@ -187,6 +192,7 @@ Custom indicator must be a subclass of `UIView` and implement the following meth
 ```
 
 Objective-C: 
+
 ```objc
 // optionally you can use custom indicator view
 CustomInfiniteIndicator *infiniteIndicator = [[CustomInfiniteIndicator alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
@@ -195,6 +201,7 @@ self.tableView.infiniteScrollIndicatorView = indicator;
 ```
 
 Swift: 
+
 ```swift
 // optionally you can use custom indicator view
 tableView.infiniteScrollIndicatorView = CustomInfiniteIndicator(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
@@ -213,6 +220,7 @@ At the moment InfiniteScroll uses indicator's frame directly so make sure you si
 Sometimes you need to prevent the infinite scroll from continuing. For example, if your search API has no more results, it does not make sense to keep making the requests or to show the spinner.
 
 Objective-C: 
+
 ```objc
 // Provide a block to be called right before a infinite scroll event is triggered.  Return YES to allow or NO to prevent it from triggering.
 [self.tableView setShouldShowInfiniteScrollHandler:^BOOL(UIScrollView *scrollView) {
