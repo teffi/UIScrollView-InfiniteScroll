@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>UIScrollView_InfiniteScroll  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a title="UIScrollView_InfiniteScroll  Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="index.html">UIScrollView_InfiniteScroll Docs</a> (100% documented)</p>
+        <p class="header-right"><a href="https://github.com/pronebird/UIScrollView-InfiniteScroll"><img src="img/gh.png"/>View on GitHub</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="index.html">UIScrollView_InfiniteScroll Reference</a>
+        <img id="carat" src="img/carat.png" />
+        UIScrollView_InfiniteScroll  Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="Categories.html">Categories</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Categories/UICollectionView(InfiniteScrollConvenienceInterface).html">UICollectionView(InfiniteScrollConvenienceInterface)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Categories/UIScrollView(InfiniteScroll).html">UIScrollView(InfiniteScroll)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Categories/UITableView(InfiniteScrollConvenienceInterface).html">UITableView(InfiniteScrollConvenienceInterface)</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            
+            <a href='#uiscrollview-infinitescroll' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='uiscrollview-infinitescroll'>UIScrollView+InfiniteScroll</h2>
+
+<p>Infinite scroll implementation as a category for UIScrollView.</p>
+
+<p>Be aware that this category swizzles <code>setContentOffset</code> and <code>setContentSize</code> on <code>UIScrollView</code>.</p>
+
+<p><img src="https://raw.githubusercontent.com/pronebird/UIScrollView-InfiniteScroll/master/README%20images/InfiniteScroll1.gif" width="25%" align="left" hspace="10" vspace="10">
+<img src="https://raw.githubusercontent.com/pronebird/UIScrollView-InfiniteScroll/master/README%20images/InfiniteScroll2.gif" width="25%" hspace="10" vspace="10">
+<img src="https://raw.githubusercontent.com/pronebird/UIScrollView-InfiniteScroll/master/README%20images/InfiniteScroll3.gif" width="25%" hspace="10" vspace="10"></p>
+
+<p>* The content used in demo app is publicly available and provided by hn.algolia.com and Flickr. Both can be inappropriate.</p>
+<a href='#cocoapods' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='cocoapods'>CocoaPods</h3>
+
+<p>Just add the following line in your Podfile:</p>
+<pre class="highlight ruby"><code><span class="n">pod</span> <span class="s1">'UIScrollView-InfiniteScroll'</span>
+</code></pre>
+<a href='#basic-usage' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='basic-usage'>Basic usage</h3>
+
+<p>Objective-C:</p>
+<pre class="highlight objective_c"><code><span class="c1">// Somewhere in your implementation file
+</span><span class="cp">#import &lt;UIScrollView+InfiniteScroll.h&gt;
+</span>
+<span class="c1">// ...
+</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">viewDidLoad</span> <span class="p">{</span>
+    <span class="p">[</span><span class="n">super</span> <span class="nf">viewDidLoad</span><span class="p">];</span>
+
+    <span class="c1">// change indicator view style to white
+</span>    <span class="n">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">infiniteScrollIndicatorStyle</span> <span class="o">=</span> <span class="n">UIActivityIndicatorViewStyleWhite</span><span class="p">;</span>
+
+    <span class="c1">// setup infinite scroll
+</span>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">tableView</span> <span class="nf">addInfiniteScrollWithHandler</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">UITableView</span><span class="o">*</span> <span class="n">tableView</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">//
+</span>        <span class="c1">// fetch your data here, can be async operation,
+</span>        <span class="c1">// just make sure to call finishInfiniteScroll in the end
+</span>        <span class="c1">//
+</span>
+        <span class="n">NSArray</span><span class="o">&lt;</span><span class="n">NSIndexPath</span> <span class="o">*&gt;</span> <span class="o">*</span> <span class="n">indexPaths</span><span class="p">;</span> <span class="c1">// index paths of updated rows
+</span>
+        <span class="c1">// make sure to update tableView before calling -finishInfiniteScroll
+</span>        <span class="p">[</span><span class="n">tableView</span> <span class="nf">beginUpdates</span><span class="p">];</span>
+        <span class="p">[</span><span class="n">tableView</span> <span class="nf">insertRowsAtIndexPaths</span><span class="p">:</span><span class="n">indexPaths</span> <span class="nf">withRowAnimation</span><span class="p">:</span><span class="n">UITableViewRowAnimationAutomatic</span><span class="p">];</span>
+        <span class="p">[</span><span class="n">tableView</span> <span class="nf">endUpdates</span><span class="p">];</span>
+
+        <span class="c1">// finish infinite scroll animation
+</span>        <span class="p">[</span><span class="n">tableView</span> <span class="nf">finishInfiniteScroll</span><span class="p">];</span>
+    <span class="p">}];</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>Swift</p>
+
+<p>Before using InfiniteScroll you have to add the following line in your bridging header file: </p>
+<pre class="highlight objective_c"><code><span class="cp">#import &lt;UIScrollView_InfiniteScroll/UIScrollView+InfiniteScroll.h&gt;
+</span></code></pre>
+<pre class="highlight swift"><code><span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
+
+    <span class="c1">// change indicator view style to white</span>
+    <span class="n">tableView</span><span class="o">.</span><span class="n">infiniteScrollIndicatorStyle</span> <span class="o">=</span> <span class="o">.</span><span class="kt">White</span>
+
+    <span class="c1">// Add infinite scroll handler</span>
+    <span class="n">tableView</span><span class="o">.</span><span class="n">addInfiniteScrollWithHandler</span> <span class="p">{</span> <span class="p">(</span><span class="n">tableView</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span> <span class="k">in</span>
+        <span class="c1">//</span>
+        <span class="c1">// fetch your data here, can be async operation,</span>
+        <span class="c1">// just make sure to call finishInfiniteScroll in the end</span>
+        <span class="c1">//</span>
+
+        <span class="k">let</span> <span class="nv">indexPaths</span> <span class="o">=</span> <span class="p">[</span><span class="kt">NSIndexPath</span><span class="p">]()</span> <span class="c1">// index paths of updated rows</span>
+
+        <span class="c1">// make sure you update tableView before calling -finishInfiniteScroll</span>
+        <span class="n">tableView</span><span class="o">.</span><span class="nf">beginUpdates</span><span class="p">()</span>
+        <span class="n">tableView</span><span class="o">.</span><span class="nf">insertRowsAtIndexPaths</span><span class="p">(</span><span class="n">indexPaths</span><span class="p">,</span> <span class="nv">withRowAnimation</span><span class="p">:</span> <span class="o">.</span><span class="kt">Automatic</span><span class="p">)</span>
+        <span class="n">tableView</span><span class="o">.</span><span class="nf">endUpdates</span><span class="p">()</span>
+
+        <span class="c1">// finish infinite scroll animation</span>
+        <span class="n">tableView</span><span class="o">.</span><span class="nf">finishInfiniteScroll</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+<a href='#collection-view-quirks' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='collection-view-quirks'>Collection view quirks</h4>
+
+<p><code>UICollectionView#reloadData</code> causes contentOffset to reset. Please use <code>UICollectionView#performBatchUpdates</code> instead when possible.</p>
+
+<p>Objective-C:</p>
+<pre class="highlight objective_c"><code><span class="c1">// Somewhere in your implementation file
+</span><span class="cp">#import &lt;UIScrollView+InfiniteScroll.h&gt;
+</span>
+<span class="c1">// ...
+</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">viewDidLoad</span> <span class="p">{</span>
+    <span class="p">[</span><span class="n">super</span> <span class="nf">viewDidLoad</span><span class="p">];</span>
+
+    <span class="n">__weak</span> <span class="n">typeof</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="n">weakSelf</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
+
+    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">collectionView</span> <span class="nf">addInfiniteScrollWithHandler</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">UICollectionView</span><span class="o">*</span> <span class="n">collectionView</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">//
+</span>        <span class="c1">// fetch your data here, can be async operation,
+</span>        <span class="c1">// just make sure to call finishInfiniteScroll in the end
+</span>        <span class="c1">//
+</span>
+        <span class="c1">// suppose this is an array with new data
+</span>        <span class="n">NSArray</span> <span class="o">*</span><span class="n">newStories</span><span class="p">;</span>
+
+        <span class="n">NSMutableArray</span> <span class="o">*</span><span class="n">indexPaths</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSMutableArray</span> <span class="nf">new</span><span class="p">];</span>
+        <span class="n">NSInteger</span> <span class="n">index</span> <span class="o">=</span> <span class="n">weakSelf</span><span class="p">.</span><span class="n">allStories</span><span class="p">.</span><span class="n">count</span><span class="p">;</span>
+
+        <span class="c1">// create index paths for affected items
+</span>        <span class="k">for</span><span class="p">(</span><span class="n">Story</span> <span class="o">*</span><span class="n">story</span> <span class="k">in</span> <span class="n">newStories</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">NSIndexPath</span> <span class="o">*</span><span class="n">indexPath</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSIndexPath</span> <span class="nf">indexPathForItem</span><span class="p">:</span><span class="n">index</span><span class="o">++</span> <span class="nf">inSection</span><span class="p">:</span><span class="mi">0</span><span class="p">];</span>
+
+            <span class="p">[</span><span class="n">weakSelf</span><span class="p">.</span><span class="n">allStories</span> <span class="nf">addObject</span><span class="p">:</span><span class="n">story</span><span class="p">];</span>
+            <span class="p">[</span><span class="n">indexPaths</span> <span class="nf">addObject</span><span class="p">:</span><span class="n">indexPath</span><span class="p">];</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Update collection view
+</span>        <span class="p">[</span><span class="n">collectionView</span> <span class="nf">performBatchUpdates</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
+            <span class="c1">// add new items into collection
+</span>            <span class="p">[</span><span class="n">collectionView</span> <span class="nf">insertItemsAtIndexPaths</span><span class="p">:</span><span class="n">indexPaths</span><span class="p">];</span>
+        <span class="p">}</span> <span class="nf">completion</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">BOOL</span> <span class="n">finished</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// finish infinite scroll animations
+</span>            <span class="p">[</span><span class="n">collectionView</span> <span class="nf">finishInfiniteScroll</span><span class="p">];</span>
+        <span class="p">}];</span>
+    <span class="p">}];</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>Swift: </p>
+<pre class="highlight swift"><code><span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
+
+    <span class="c1">// Add infinite scroll handler</span>
+    <span class="n">collectionView</span><span class="p">?</span><span class="o">.</span><span class="n">addInfiniteScrollWithHandler</span> <span class="p">{</span> <span class="p">[</span><span class="k">weak</span> <span class="k">self</span><span class="p">]</span> <span class="p">(</span><span class="n">scrollView</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span> <span class="k">in</span>
+        <span class="k">let</span> <span class="nv">collectionView</span> <span class="o">=</span> <span class="n">scrollView</span> <span class="k">as!</span> <span class="kt">UICollectionView</span>
+
+        <span class="c1">// suppose this is an array with new data</span>
+        <span class="k">let</span> <span class="nv">newStories</span> <span class="o">=</span> <span class="p">[</span><span class="kt">Story</span><span class="p">]()</span>
+
+        <span class="k">var</span> <span class="nv">indexPaths</span> <span class="o">=</span> <span class="p">[</span><span class="kt">NSIndexPath</span><span class="p">]()</span>
+        <span class="k">let</span> <span class="nv">index</span> <span class="o">=</span> <span class="k">self</span><span class="p">?</span><span class="o">.</span><span class="n">allStories</span><span class="o">.</span><span class="n">count</span>
+
+        <span class="c1">// create index paths for affected items</span>
+        <span class="k">for</span> <span class="n">story</span> <span class="k">in</span> <span class="n">newStories</span> <span class="p">{</span>
+            <span class="k">let</span> <span class="nv">indexPath</span> <span class="o">=</span> <span class="kt">NSIndexPath</span><span class="p">(</span><span class="nv">forItem</span><span class="p">:</span> <span class="n">index</span><span class="o">++</span><span class="p">,</span> <span class="nv">inSection</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+
+            <span class="n">indexPaths</span><span class="o">.</span><span class="nf">append</span><span class="p">(</span><span class="n">indexPath</span><span class="p">)</span>
+            <span class="k">self</span><span class="p">?</span><span class="o">.</span><span class="n">allStories</span><span class="o">.</span><span class="nf">append</span><span class="p">(</span><span class="n">story</span><span class="p">)</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Update collection view</span>
+        <span class="n">collectionView</span><span class="o">.</span><span class="nf">performBatchUpdates</span><span class="p">({</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Void</span> <span class="k">in</span>
+            <span class="c1">// add new items into collection</span>
+            <span class="n">collectionView</span><span class="o">.</span><span class="nf">insertItemsAtIndexPaths</span><span class="p">(</span><span class="n">indexPaths</span><span class="p">)</span>
+        <span class="p">},</span> <span class="nv">completion</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="n">finished</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span> <span class="k">in</span>
+            <span class="c1">// finish infinite scroll animations</span>
+            <span class="n">collectionView</span><span class="o">.</span><span class="nf">finishInfiniteScroll</span><span class="p">()</span>
+        <span class="p">});</span>
+
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+<a href='#custom-indicator' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='custom-indicator'>Custom indicator</h3>
+
+<p>You can use custom indicator instead of default <code>UIActivityIndicatorView</code>.</p>
+
+<p>Custom indicator must be a subclass of <code>UIView</code> and implement the following methods:</p>
+<pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">startAnimating</span><span class="p">;</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">stopAnimating</span><span class="p">;</span>
+</code></pre>
+
+<p>Objective-C: </p>
+<pre class="highlight objective_c"><code><span class="c1">// optionally you can use custom indicator view
+</span><span class="n">CustomInfiniteIndicator</span> <span class="o">*</span><span class="n">infiniteIndicator</span> <span class="o">=</span> <span class="p">[[</span><span class="n">CustomInfiniteIndicator</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">initWithFrame</span><span class="p">:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">)];</span>
+
+<span class="n">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">infiniteScrollIndicatorView</span> <span class="o">=</span> <span class="n">indicator</span><span class="p">;</span>
+</code></pre>
+
+<p>Swift: </p>
+<pre class="highlight swift"><code><span class="c1">// optionally you can use custom indicator view</span>
+<span class="n">tableView</span><span class="o">.</span><span class="n">infiniteScrollIndicatorView</span> <span class="o">=</span> <span class="kt">CustomInfiniteIndicator</span><span class="p">(</span><span class="nv">frame</span><span class="p">:</span> <span class="kt">CGRect</span><span class="p">(</span><span class="nv">x</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">y</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">width</span><span class="p">:</span> <span class="mi">24</span><span class="p">,</span> <span class="nv">height</span><span class="p">:</span> <span class="mi">24</span><span class="p">))</span>
+</code></pre>
+
+<p>Please see example implementation of indicator view:</p>
+
+<ul>
+<li><p>Objective-C: <a href="https://github.com/pronebird/UIScrollView-InfiniteScroll/blob/master/InfiniteScrollViewDemo/CustomInfiniteIndicator.m">CustomInfiniteIndicator.m</a></p></li>
+<li><p>Swift: <a href="https://github.com/pronebird/UIScrollView-InfiniteScroll/blob/master/InfiniteScrollViewDemoSwift/CustomInfiniteIndicator.swift">CustomInfiniteIndicator.swift</a></p></li>
+</ul>
+
+<p>At the moment InfiniteScroll uses indicator&rsquo;s frame directly so make sure you size custom indicator view beforehand. Such views as <code>UIImageView</code> or <code>UIActivityIndicatorView</code> will automatically resize themselves so no need to setup frame for them.</p>
+<a href='#prevent-infinite-scroll' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='prevent-infinite-scroll'>Prevent infinite scroll</h3>
+
+<p>Sometimes you need to prevent the infinite scroll from continuing. For example, if your search API has no more results, it does not make sense to keep making the requests or to show the spinner.</p>
+
+<p>Objective-C: </p>
+<pre class="highlight objective_c"><code><span class="c1">// Provide a block to be called right before a infinite scroll event is triggered.  Return YES to allow or NO to prevent it from triggering.
+</span><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">tableView</span> <span class="nf">setShouldShowInfiniteScrollHandler</span><span class="p">:</span><span class="o">^</span><span class="n">BOOL</span><span class="p">(</span><span class="n">UIScrollView</span> <span class="o">*</span><span class="n">scrollView</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Only show up to 5 pages then prevent the infinite scroll
+</span>    <span class="k">return</span> <span class="p">(</span><span class="n">weakSelf</span><span class="p">.</span><span class="n">currentPage</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">);</span>
+<span class="p">}];</span>
+</code></pre>
+<a href='#seamlessly-preload-content' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='seamlessly-preload-content'>Seamlessly preload content</h3>
+
+<p>Ideally you want your content to flow seamlessly without ever showing a spinner. Infinite scroll offers an option to specify offset in points that will be used to start preloader before user reaches the bottom of scroll view. </p>
+
+<p>The proper balance between the number of results you load each time and large enough offset should give your users a decent experience. Most likely you will have to come up with your own formula for the combination of those based on kind of content and device dimensions.</p>
+
+<p>Objective-C:</p>
+<pre class="highlight objective_c"><code><span class="c1">// Preload more data 500pt before reaching the bottom of scroll view.
+</span><span class="n">tableView</span><span class="p">.</span><span class="n">infiniteScrollTriggerOffset</span> <span class="o">=</span> <span class="mi">500</span><span class="p">;</span>
+</code></pre>
+<a href='#contributors' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='contributors'>Contributors</h3>
+
+<ul>
+<li><a href="https://github.com/GorkaMM">@GorkaMM</a><br/>
+Added custom trigger offset</li>
+<li><a href="https://github.com/intrepidmatt">@intrepidmatt</a><br/>
+Solved longstanding issue with dynamic updates in table views (see <a href="https://github.com/pronebird/UIScrollView-InfiniteScroll/issues/31">#31</a>)</li>
+<li>Ryan Bertrand <a href="https://github.com/RyanBertrand">@RyanBertrand</a><br/>
+Added a handler to conditionally prevent the infinite scroll from showing</li>
+<li>Maxim Veksler <a href="https://github.com/maximveksler">@maximveksler</a><br/>
+Swift 2.2 upgrade</li>
+<li>Shigeyuki Takeuchi <a href="https://github.com/takeshig">@takeshig</a><br/>
+Add Carthage support</li>
+<li>Ivan Chirkov <a href="https://github.com/nsleader">@nsleader</a><br/>
+Custom indicators support</li>
+<li>Alex Shevchenko <a href="https://github.com/skeeet">@skeeet</a><br/>
+Fix for bounce back glitch when content size is smaller than view bounds</li>
+<li>Vlad <a href="https://github.com/brightsider">brightsider</a><br/>
+Add access to check loading status</li>
+</ul>
+
+<p>.. and many others who reported issues and participated in conversations</p>
+<a href='#attributions' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='attributions'>Attributions</h3>
+
+<p>Demo app icon by <a href="http://appicontemplate.com/ios8/">PixelResort</a>.</p>
+
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2016 <a class="link" href="http://codeispoetry.ru/" target="_blank" rel="external">Andrei Mihailov</a>. All rights reserved. (Last updated: 2016-12-20)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
