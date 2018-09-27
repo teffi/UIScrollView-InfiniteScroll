@@ -44,6 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic) CGFloat infiniteScrollIndicatorMargin;
 
+
 /**
  *  Sets the offset between the real end of the scroll view content and the scroll position, so the handler can be triggered before reaching end.
  *  Defaults to 0.0;
@@ -95,6 +96,12 @@ NS_ASSUME_NONNULL_BEGIN
  *  animations properly and reset infinite scroll state
  */
 - (void)finishInfiniteScroll;
+
+/**
+ *  Default to true which waits the scrollview to decelerate before invoking the infiniteScrollHandler.
+ *  Set to false to instantly call the infiniteScrollHandler once the trigger is invoked.
+ */
+@property (nonatomic) BOOL handleOnDecelerate;
 
 @end
 

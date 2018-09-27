@@ -104,6 +104,11 @@ static const void *kPBInfiniteScrollStateKey = &kPBInfiniteScrollStateKey;
 @property (nonatomic) CGFloat triggerOffset;
 
 /**
+ *  Handling with decelerate
+ */
+@property (nonatomic) BOOL handleOnDecelerate;
+
+/**
  *  Infinite scroll handler block
  */
 @property (nonatomic, copy) void(^infiniteScrollHandler)(id scrollView);
@@ -132,6 +137,7 @@ static const void *kPBInfiniteScrollStateKey = &kPBInfiniteScrollStateKey;
     
     // Default row height (44) minus activity indicator height (22) / 2
     _indicatorMargin = 11;
+    _handleOnDecelerate = YES;
     
     return self;
 }
@@ -264,6 +270,14 @@ static const void *kPBInfiniteScrollStateKey = &kPBInfiniteScrollStateKey;
 
 - (void)setInfiniteScrollTriggerOffset:(CGFloat)infiniteScrollTriggerOffset {
     self.pb_infiniteScrollState.triggerOffset = fabs(infiniteScrollTriggerOffset);
+}
+
+- (BOOL) handleOnDecelerate{
+    return self.pb_infiniteScrollState.handleOnDecelerate;
+}
+
+- (void)setHandleOnDecelerate:(BOOL)handleOnDecelerate{
+    self.pb_infiniteScrollState.handleOnDecelerate = handleOnDecelerate;
 }
 
 #pragma mark - Private dynamic properties
@@ -455,8 +469,12 @@ static const void *kPBInfiniteScrollStateKey = &kPBInfiniteScrollStateKey;
     if([self pb_shouldShowInfiniteScroll]) {
         [self pb_startAnimatingInfiniteScroll:forceScroll];
         
-        // This will delay handler execution until scroll deceleration
-        [self performSelector:@selector(pb_callInfiniteScrollHandler) withObject:self afterDelay:0.1 inModes:@[ NSDefaultRunLoopMode ]];
+        if(self.handleOnDecelerate){
+            // This will delay handler execution until scroll deceleration
+            [self performSelector:@selector(pb_callInfiniteScrollHandler) withObject:self afterDelay:0.1 inModes:@[ NSDefaultRunLoopMode ]];
+        }else{
+            [self pb_callInfiniteScrollHandler];
+        }
     }
 }
 
