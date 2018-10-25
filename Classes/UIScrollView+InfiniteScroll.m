@@ -34,7 +34,7 @@ static void PBSwizzleMethod(Class c, SEL original, SEL alternate) {
  *
  *  See https://github.com/pronebird/UIScrollView-InfiniteScroll/issues/31
  *
- *  @param tableView
+ *  @param tableView - receiver tableview
  */
 static void PBForceUpdateTableViewContentSize(UITableView *tableView) {
     tableView.contentSize = [tableView sizeThatFits:CGSizeMake(CGRectGetWidth(tableView.frame), CGFLOAT_MAX)];
@@ -312,7 +312,7 @@ static const void *kPBInfiniteScrollStateKey = &kPBInfiniteScrollStateKey;
 /**
  *  Additional pan gesture handler used to adjust content offset to reveal or hide indicator view.
  *
- *  @param gestureRecognizer
+ *  @param gestureRecognizer -
  */
 - (void)pb_handlePanGesture:(UITapGestureRecognizer *)gestureRecognizer {
     if(gestureRecognizer.state == UIGestureRecognizerStateEnded) {
@@ -323,7 +323,7 @@ static const void *kPBInfiniteScrollStateKey = &kPBInfiniteScrollStateKey;
 /**
  *  This is a swizzled proxy method for setContentOffset of UIScrollView.
  *
- *  @param contentOffset
+ *  @param contentOffset -
  */
 - (void)pb_setContentOffset:(CGPoint)contentOffset {
     [self pb_setContentOffset:contentOffset];
@@ -336,7 +336,7 @@ static const void *kPBInfiniteScrollStateKey = &kPBInfiniteScrollStateKey;
 /**
  *  This is a swizzled proxy method for setContentSize of UIScrollView
  *
- *  @param contentSize
+ *  @param contentSize -
  */
 - (void)pb_setContentSize:(CGSize)contentSize {
     [self pb_setContentSize:contentSize];
