@@ -8,8 +8,7 @@ Pod::Spec.new do |s|
     'Andrej Mihajlov' => 'and@codeispoetry.ru'
   }
   s.source   = {
-    :git => 'https://github.com/teffi/UIScrollView-InfiniteScroll.git',
-    :tag => s.version.to_s
+    :git => 'https://github.com/teffi/UIScrollView-InfiniteScroll.git'
   }
   s.source_files = 'Classes/*.{h,m}'
   s.requires_arc = true
