@@ -2,9 +2,19 @@
 
 Infinite scroll implementation as a category for UIScrollView.
 
-<img src="https://raw.githubusercontent.com/pronebird/UIScrollView-InfiniteScroll/master/README%20images/InfiniteScroll1.gif" width="25%" align="left" hspace="10" vspace="10">
-<img src="https://raw.githubusercontent.com/pronebird/UIScrollView-InfiniteScroll/master/README%20images/InfiniteScroll2.gif" width="25%" hspace="10" vspace="10">
-<img src="https://raw.githubusercontent.com/pronebird/UIScrollView-InfiniteScroll/master/README%20images/InfiniteScroll3.gif" width="25%" hspace="10" vspace="10">
+<table>
+    <tr>
+        <td>
+            <img src="https://raw.githubusercontent.com/pronebird/UIScrollView-InfiniteScroll/master/README%20images/InfiniteScroll1.gif">
+        </td>
+        <td>
+            <img src="https://raw.githubusercontent.com/pronebird/UIScrollView-InfiniteScroll/master/README%20images/InfiniteScroll2.gif">
+        </td>
+        <td>
+            <img src="https://raw.githubusercontent.com/pronebird/UIScrollView-InfiniteScroll/master/README%20images/InfiniteScroll3.gif">
+        </td>
+    </tr>
+</table>
 
 \* The content used in demo app is publicly available and provided by hn.algolia.com and Flickr. Both can be inappropriate.
 
@@ -17,7 +27,7 @@ Be aware that this category [swizzles](http://nshipster.com/method-swizzling/) `
 Just add the following line in your Podfile:
 
 ```ruby
-pod 'UIScrollView-InfiniteScroll', '~> 1.0.0'
+pod 'UIScrollView-InfiniteScroll', '~> 1.1.0'
 ```
 
 ### Examples
@@ -81,9 +91,9 @@ Many people make mistake by using external reference to table view or collection
 #### Swift
 
 ```swift
-tableView.addInfiniteScrollWithHandler { (tableView) -> Void in
+tableView.addInfiniteScroll { (tableView) -> Void in
     // update table view
-    
+            
     // finish infinite scroll animation
     tableView.finishInfiniteScroll()
 }
@@ -109,7 +119,7 @@ tableView.addInfiniteScrollWithHandler { (tableView) -> Void in
 #### Swift
 
 ```swift
-collectionView.addInfiniteScrollWithHandler { (collectionView) -> Void in
+collectionView.addInfiniteScroll { (collectionView) -> Void in
     collectionView.performBatchUpdates({ () -> Void in
         // update collection view
     }, completion: { (finished) -> Void in
@@ -207,24 +217,7 @@ At the moment InfiniteScroll uses indicator's frame directly so make sure you si
 
 ### Contributors
 
-* [@GorkaMM](https://github.com/GorkaMM)<br/>
-  Added custom trigger offset
-* [@intrepidmatt](https://github.com/intrepidmatt)<br/>
-  Solved longstanding issue with dynamic updates in table views (see [#31](https://github.com/pronebird/UIScrollView-InfiniteScroll/issues/31))
-* Ryan Bertrand [@RyanBertrand](https://github.com/RyanBertrand)<br/>
-  Added a handler to conditionally prevent the infinite scroll from showing
-* Maxim Veksler [@maximveksler](https://github.com/maximveksler)<br/>
-  Swift 2.2 upgrade
-* Shigeyuki Takeuchi [@takeshig](https://github.com/takeshig)<br/>
-  Add Carthage support
-* Ivan Chirkov [@nsleader](https://github.com/nsleader)<br/>
-  Custom indicators support
-* Alex Shevchenko [@skeeet](https://github.com/skeeet)<br/>
-  Fix for bounce back glitch when content size is smaller than view bounds
-* Vlad [brightsider](https://github.com/brightsider)<br/>
-  Add access to check loading status
-
-.. and many others who reported issues and participated in conversations
+Please see [CHANGES](https://github.com/pronebird/UIScrollView-InfiniteScroll/blob/master/CHANGES)
 
 ### Attributions
 
